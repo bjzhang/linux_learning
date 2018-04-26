@@ -1,0 +1,11 @@
+
+- hosts: j2
+  tasks:
+      - name: generate jinja2 template
+        template:
+            src: j2_test.sh.j2
+            dest: "{{ deploy_dir }}/j2_test.sh"
+            mode: "755"
+            backup: yes
+      - name: run script
+        command: "{{ deploy_dir }}/j2_test.sh"
