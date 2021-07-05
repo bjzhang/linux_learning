@@ -1,0 +1,2 @@
+name: CMAKE_TEST
+desc: Buildroot external package for cmake test
