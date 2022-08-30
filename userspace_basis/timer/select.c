@@ -37,12 +37,12 @@ int main(int argc, char *argv[])
 	gettimeofday(&end, NULL);
 
 	if (retval == -1)
-	perror("select()");
+		perror("select()");
 	else if (retval)
-	printf("Data is available now.\n");
-	/* FD_ISSET(0, &rfds) will be true. */
+		printf("Data is available now.\n");
+		/* FD_ISSET(0, &rfds) will be true. */
 	else
-	printf("No data within user input seconds(%d %d).\n", tv.tv_sec, tv.tv_usec);
+		printf("No data within user input seconds(%d %d).\n", tv.tv_sec, tv.tv_usec);
 
 	printf("time passed from %d.%06d to %d.%06d\n", start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);
 	if (end.tv_usec < start.tv_usec) {
