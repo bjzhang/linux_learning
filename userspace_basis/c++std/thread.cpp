@@ -65,13 +65,50 @@ void consumer()
 	}
 }
 
+class MyThread
+{
+public:
+	~MyThread();
+	void startThread();
+	void threadTest();
+private:
+	std::thread t;
+};
+
+MyThread::~MyThread()
+{
+	t.join();
+}
+
+void MyThread::startThread()
+{
+	t = std::thread(&MyThread::threadTest, this);
+}
+
+void MyThread::threadTest()
+{
+	for(int i = 0; i < 5; i++) {
+		int sec = rand() % 10;
+		std::cout << this << ": " << i << ", second: " << sec << std::endl;
+		std::this_thread::sleep_for((std::chrono::microseconds)sec * 100000);
+	}
+}
+
 int main()
 {
+	//Test sleep
 	//std::thread tSleep(sleep);
 	//tSleep.join();
 
-	std::thread tProducer(producer), tConsumer(consumer);
-	tProducer.join();
-	tConsumer.join();
+	//Test wait_for
+	//std::thread tProducer(producer), tConsumer(consumer);
+	//tProducer.join();
+	//tConsumer.join();
+
+	//Test create multiple threads from the same class
+	MyThread m;
+	MyThread n;
+	m.startThread();
+	n.startThread();
 	return 0;
 }
