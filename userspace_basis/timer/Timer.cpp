@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <iomanip>      // std::setprecision
-#include "timer.h"
+#include "Timer.h"
 
 void Timer_t::print(std::string s, bool isPrintDelta = false)
 {

@@ -1,5 +1,5 @@
 
-#include "timer.h"
+#include "Timer.h"
 #include <iostream>
 
 class MyTimer_t {
