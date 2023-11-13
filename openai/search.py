@@ -5,12 +5,31 @@ from langchain.tools import Tool
 from langchain.utilities import GoogleSearchAPIWrapper
 from openai import OpenAI
 
+debug=False
+verbose=False
+
 question = sys.argv[1]
 
 search = GoogleSearchAPIWrapper()
 
 def top5_results(query):
     return search.results(query, 5)
+
+client = OpenAI()
+if debug:
+    response = client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant for computer architecture and operating system"},
+            {"role": "user", "content": question}
+        ]
+    )
+
+    #ePrint the entire response
+    print(response)
+
+if debug:
+    print("with assistant")
 
 tool = Tool(
     name="Google Search",
@@ -20,24 +39,11 @@ tool = Tool(
 
 result = tool.run(question)
 
-client = OpenAI()
-
-response = client.chat.completions.create(
-    model="gpt-4-1106-preview",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant for computer architecture and operating system"},
-        {"role": "user", "content": question}
-    ]
-)
-
-# Print the entire response
-print(response)
-
-print("with assistant")
-#print(result)
+if verbose:
+    print(result)
 
 question_with_prompt='''
-You are a knowledgeable and helpful person that can answer any questions. Your task is to answer the following question delimited by triple backticks.
+You are a knowledgeable and helpful person that can answer any questions. Your task is to answer the following question delimited by triple backticks. Keep output as same as input language. Do necessary translation if needed.
 
 Question:
 ```
@@ -61,11 +67,13 @@ Make the answer as short as possible, ideally no more than 150 words.
 merged_result = ''
 # Format and print the data
 for entry in result:
-    print(entry)
+    if debug:
+        print(entry)
     formatted_output = f"URL: {entry['link']}\nTITLE: {entry['title']}\nCONTENT: {entry['snippet']}\n"
     merged_result += formatted_output
 
-print(question_with_prompt)
+if debug:
+	print(question_with_prompt)
 
 response = client.chat.completions.create(
     model="gpt-4",
@@ -77,4 +85,11 @@ response = client.chat.completions.create(
 )
 
 # Print the entire response
-print(response)
+if debug:
+	print(response)
+
+# Extract real content from the response
+real_content = response.choices[0].message.content
+
+# Output the real content
+print(real_content)
